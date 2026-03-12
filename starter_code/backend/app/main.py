@@ -20,6 +20,13 @@ from app.models.dividend_event import DividendEvent
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=settings.app_name)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -34,6 +41,11 @@ app.include_router(events_router)
 app.include_router(holdings_router)
 app.include_router(dashboard_router)
 app.include_router(jobs_router)
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 
 @app.get("/")

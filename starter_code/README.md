@@ -59,6 +59,9 @@ npm run dev
 ### Companies
 - `GET /companies`
 - `POST /companies`
+  - retorna `201` quando cria
+  - retorna `409` quando `ticker` já existe
+  - aceita `?idempotent=true` para retornar a empresa existente com `200`
 
 ### Events
 - `GET /events`
