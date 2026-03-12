@@ -1,0 +1,2 @@
+-- Seed inicial didático.
+-- Quando o projeto crescer, isto aqui pode migrar para Alembic + scripts de seed.
