@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -20,3 +20,14 @@ def create_holding(payload: HoldingCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(holding)
     return holding
+
+
+@router.delete("/{holding_id}")
+def delete_holding(holding_id: int, db: Session = Depends(get_db)):
+    holding = db.query(Holding).filter(Holding.id == holding_id).first()
+    if not holding:
+        raise HTTPException(status_code=404, detail="Holding não encontrada")
+
+    db.delete(holding)
+    db.commit()
+    return {"deleted": holding_id}

@@ -8,6 +8,7 @@ class DividendEvent(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     company_id = Column(Integer, ForeignKey("companies.id"), nullable=True)
+    source_document_id = Column(Integer, ForeignKey("source_documents.id"), nullable=True, index=True)
     ticker = Column(String, nullable=False, index=True)
     event_type = Column(String, nullable=False)
     amount_per_share = Column(Float, nullable=False)

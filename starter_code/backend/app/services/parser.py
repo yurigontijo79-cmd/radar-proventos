@@ -34,7 +34,7 @@ def parse_br_date(raw: str):
 
 def detect_event_type(text: str) -> str:
     lowered = text.lower()
-    if "juros sobre capital próprio" in lowered or "jcp" in lowered:
+    if "juros sobre capital próprio" in lowered or "juros sobre capital proprio" in lowered or "jcp" in lowered:
         return "JCP"
     if "dividendo" in lowered:
         return "DIVIDEND"
@@ -57,9 +57,7 @@ def parse_dividend_document(text: str) -> dict | None:
 
     Heurística simples:
     - pega o primeiro valor monetário como valor por ação;
-    - tenta capturar até três datas na ordem em que aparecem.
-
-    Isso não é perfeito, mas já permite validar o pipeline end-to-end.
+    - usa até quatro datas para announcement/record/ex/payment.
     """
     amount = extract_first_money(text)
     if amount is None:
@@ -73,6 +71,7 @@ def parse_dividend_document(text: str) -> dict | None:
         "amount_per_share": amount,
         "announcement_date": dates[0] if len(dates) > 0 else None,
         "record_date": dates[1] if len(dates) > 1 else None,
-        "payment_date": dates[2] if len(dates) > 2 else None,
+        "ex_date": dates[2] if len(dates) > 2 else None,
+        "payment_date": dates[3] if len(dates) > 3 else (dates[2] if len(dates) > 2 else None),
     }
     return payload
