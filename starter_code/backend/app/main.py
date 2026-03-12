@@ -34,5 +34,10 @@ app.include_router(jobs_router)
 
 
 @app.get("/")
-def healthcheck():
+def root_status():
     return {"app": settings.app_name, "status": "ok"}
+
+
+@app.get("/health")
+def health_status():
+    return {"status": "ok"}
