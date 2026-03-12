@@ -5,6 +5,7 @@ Aqui a aplicação nasce, sobe as tabelas e registra as rotas.
 """
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.companies import router as companies_router
 from app.api.dashboard import router as dashboard_router
@@ -13,10 +14,18 @@ from app.api.holdings import router as holdings_router
 from app.api.jobs import router as jobs_router
 from app.core.config import settings
 from app.core.database import Base, engine
+from app.models.source_document import SourceDocument  # noqa: F401
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=settings.app_name)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(companies_router)
 app.include_router(events_router)
@@ -25,6 +34,11 @@ app.include_router(dashboard_router)
 app.include_router(jobs_router)
 
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
 @app.get("/")
-def healthcheck():
+def root():
     return {"app": settings.app_name, "status": "ok"}
