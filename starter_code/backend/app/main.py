@@ -14,6 +14,7 @@ from app.api.holdings import router as holdings_router
 from app.api.jobs import router as jobs_router
 from app.core.config import settings
 from app.core.database import Base, engine
+from app.models.source_document import SourceDocument  # noqa: F401
 
 Base.metadata.create_all(bind=engine)
 
@@ -33,7 +34,13 @@ app.include_router(dashboard_router)
 app.include_router(jobs_router)
 
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
 @app.get("/")
+def root():
 def root_status():
     return {"app": settings.app_name, "status": "ok"}
 

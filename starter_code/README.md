@@ -4,6 +4,8 @@ Este starter kit entrega um MVP funcional com:
 - backend FastAPI;
 - frontend React + Vite;
 - PostgreSQL;
+- docker-compose para subir tudo localmente;
+- trilha inicial de coleta real em páginas de RI (beta).
 - docker-compose para subir tudo localmente.
 
 ## Stack
@@ -47,6 +49,11 @@ npm install
 npm run dev
 ```
 
+## Endpoints disponíveis
+
+### Health
+- `GET /health`
+- `GET /`
 ## Endpoints do MVP implementados
 
 ### Companies
@@ -69,6 +76,28 @@ npm run dev
 - `GET /dashboard/cashflow`
 
 ### Jobs
+- `POST /jobs/run-ingestion` (executa coleta RI beta e persiste documentos/eventos oficiais)
+- `POST /jobs/run-predictions` (stub)
+
+## Coleta RI beta (o que realmente faz)
+1. Lê empresas ativas com `ri_url` cadastrado.
+2. Acessa a página de RI e identifica links com palavras-chave (dividendos/JCP/proventos).
+3. Baixa o conteúdo textual dos links candidatos.
+4. Salva documento bruto em:
+   - tabela `source_documents`;
+   - arquivo local `backend/data/raw_documents/*.txt`.
+5. Classifica documentos por score heurístico de termos.
+6. Extrai evento com parser regex inicial.
+7. Persiste apenas eventos **oficiais** (`confidence="official"`, `is_estimated=false`) em `dividend_events`.
+
+## Limitações atuais
+- Coleta RI não cobre PDF/JS dinâmico de forma robusta.
+- Extração ainda é heurística por regex (sujeita a falso positivo/negativo).
+- `run-predictions` continua stub.
+- Adaptador CVM continua sem implementação.
+
+## Documentação metodológica
+- `backend/docs/INGESTION_METHOD.md`
 - `POST /jobs/run-ingestion`
 - `POST /jobs/run-predictions`
 
