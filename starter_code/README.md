@@ -6,6 +6,7 @@ Este starter kit entrega um MVP funcional com:
 - PostgreSQL;
 - docker-compose para subir tudo localmente;
 - trilha inicial de coleta real em páginas de RI (beta).
+- docker-compose para subir tudo localmente.
 
 ## Stack
 - Backend: FastAPI + SQLAlchemy
@@ -53,6 +54,7 @@ npm run dev
 ### Health
 - `GET /health`
 - `GET /`
+## Endpoints do MVP implementados
 
 ### Companies
 - `GET /companies`
@@ -99,3 +101,8 @@ npm run dev
 
 ## Documentação metodológica
 - `backend/docs/INGESTION_METHOD.md`
+- `POST /jobs/run-ingestion`
+- `POST /jobs/run-predictions`
+
+## Observação
+Scrapers continuam em modo inicial (adapters/mocks) para validar o pipeline ponta a ponta antes de evoluir coleta oficial.

@@ -14,11 +14,20 @@ from app.api.holdings import router as holdings_router
 from app.api.jobs import router as jobs_router
 from app.core.config import settings
 from app.core.database import Base, engine
-from app.models.source_document import SourceDocument  # noqa: F401
+from app.models.source_document import SourceDocument
+from app.models.dividend_event import DividendEvent
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=settings.app_name)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -40,5 +49,10 @@ def health():
 
 
 @app.get("/")
-def root():
+def root_status():
     return {"app": settings.app_name, "status": "ok"}
+
+
+@app.get("/health")
+def health_status():
+    return {"status": "ok"}
